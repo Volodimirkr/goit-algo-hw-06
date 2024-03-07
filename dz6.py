@@ -12,8 +12,16 @@ class Name(Field):
 		pass
 
 class Phone(Field):
-    # реалізація класу
-		pass
+    def __init__(self, phone):
+        if self.is_valid(phone):
+            self.value = phone
+        else: 
+            raise ValueError("Inccorest phone")
+    
+    def is_valid(self, phone: str):
+        if len(phone) == 10 and phone.isdigit():
+            return True
+        return False
 
 class Record:
     def __init__(self, name):
@@ -25,13 +33,20 @@ class Record:
 
     def edit_phone(self, old_phone: str, new_phone: str):
         for phone in self.phones:
-            if phone.value == old_phone:
+            if phone.value == old_phone and phone.is_valid(new_phone):
                 phone.value = new_phone
 
     def find_phone(self, number: str):
         for phone in self.phones:
             if phone.value == number:
                 return phone
+            
+    def remove_phone(self, phone: str):
+        delphone = self.find_phone(phone)
+        if delphone:
+             self.phones.remove(delphone)
+
+
 
     # реалізація класу
 
@@ -57,7 +72,12 @@ if __name__ == "__main__":
     print(john_record.name)
     john_record.add_phone("1234567890")
     john_record.add_phone("5555555555")
+    john_record.add_phone("7777777777")
     print(john_record)
+    john_record.remove_phone("7777777777")
+    print("*")
+    print(john_record)
+    print("*")
     # Додавання запису John до адресної книги
     book.add_record(john_record)
 
